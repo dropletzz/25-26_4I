@@ -1,4 +1,3 @@
-
 class Astronave {
   public float velocitaAngolare = PI; // radianti al secondo
   public float accelerazione = 230;
@@ -11,7 +10,9 @@ class Astronave {
   public float altezza, larghezza;
   
   public Fuoco fuoco;
-  public boolean staAccelerando;
+  public boolean staAccelerando = false;
+  public boolean staRuotandoOrario = false;
+  public boolean staRuotandoAntiorario = false;
   
   public Astronave(float px, float py, float larghezza, float altezza) {
     this.px = px;
@@ -37,6 +38,14 @@ class Astronave {
       ax = 0;
       ay = 0;
     }
+    
+    if (staRuotandoOrario && !staRuotandoAntiorario)
+      vang = -velocitaAngolare;
+    else if (staRuotandoAntiorario && !staRuotandoOrario)
+      vang = velocitaAngolare;
+    else
+      vang = 0;
+
     ax = ax - coeffAttrito * vx;   
     ay = ay - coeffAttrito * vy;
     vx += ax * dt;
@@ -53,38 +62,30 @@ class Astronave {
     fuoco.aggiorna(dt);
   }
   
-  public void ruotaOrario() {
-    vang = velocitaAngolare;
+  public void accelera(boolean v) {
+    staAccelerando = v;
   }
   
-  public void ruotaAntiorario() {
-    vang = -velocitaAngolare;
+  public void ruotaOrario(boolean v) {
+    staRuotandoOrario = v;
   }
   
-  public void nonRuota() {
-    vang = 0;
-  }
-  
-  public void accelera() {
-    staAccelerando = true;
-  }
-  
-  public void nonAccelera() {
-    staAccelerando = false;
+  public void ruotaAntiorario(boolean v) {
+    staRuotandoAntiorario = v;
   }
   
   public void disegna() {
     pushMatrix();
-    translate(px, py);
-    rotate(angolo);
-    fill(#C3C3C3);
-    stroke(0, 0);
-    triangle(0, -altezza/2, -larghezza/2, altezza/2, larghezza/2, altezza/2);
-    
+      translate(px, py);
+      rotate(angolo);
+      
+      fill(#C3C3C3);
+      stroke(0, 0);
+      triangle(0, -altezza/2, -larghezza/2, altezza/2, larghezza/2, altezza/2);
 
-    if (staAccelerando) {
-      fuoco.disegna();
-    }
+      if (staAccelerando) {
+        fuoco.disegna();
+      }
     popMatrix();
   }
   

@@ -29,23 +29,20 @@ class Fuoco {
   }
   
   public void disegna() {
-    //debug
-    //fill(#FFFFFF);
-    //rect(x, y, larghezza, altezza);
-    
     stroke(0, 0);
     fill(esterno);
     disegnaTriangoli(x, y, larghezza, altezza);
     fill(interno);
     disegnaTriangoli(x+larghezza/4, y, larghezza/2, altezza/2);
   }
-    
+  
+  // x, y, l, h definiscono il rettangolo in cui disegnamo il fuoco
   private void disegnaTriangoli(float x, float y, float l, float h) {
-    float m = l/5; // margine base
+    float m = l/5; // margine tra astronave e fuoco
     
     for (int i=0; i<numTriangoli; i++) {
       float px = x+i*l/(numTriangoli-1);
-      float py = y+h + spostamentiCasuali[i] * h/5;
+      float py = y+h + spostamentiCasuali[i]*h/5;
       
       triangle(
         x+m, y,
